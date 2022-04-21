@@ -1,0 +1,68 @@
+﻿@model ChatApp.DAL.Entities.Chat
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="chat-body">
+
+    @foreach (var msg in Model.Messages)
+    {
+        <div class="message">
+            <header>@msg.UserName</header>
+            <p>@msg.Text</p>
+            <footer>@msg.When</footer>
+        </div>
+    }
+</div>
+
+<form class="chat-input" asp-controller="Home" asp-action="CreateMessage">
+    <input type="hidden" name="chatId" value="@Model.Id"/>
+    <input type="text" name="message" />
+    <button type="submit">Send</button>
+    
+
+</form>
+
+@section Scripts
+{
+    <script src="signalr/signalr.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+        var _connectionId = '';
+
+        connection.on("receiveMessage",
+            function(data) {
+                console.log(data);
+            });
+
+
+        var joinRoom = function() {
+            var url = '/Chat/JoinRoom/' + _connectionId + '/@Model.Name';
+            axios.post(url, null)
+                .then(res => {
+                    console.log("Room joined!", res);
+                })
+                .catch(err => {
+                    console.log("Failed to join the room", res);
+                })
+        }
+
+        connection.start()
+            .then(function() {
+                connection.invoke("getConnectionId")
+                    .then(function(connectionId) {
+                        _connectionId = connectionId;
+                        
+                        joinRoom();
+                    })
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+
+    </script>
+}
