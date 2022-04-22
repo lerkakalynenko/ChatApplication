@@ -11,7 +11,7 @@ namespace ChatApp.DAL.Entities
 
         public string Text { get; set; }
 
-        public DateTime When { get; set; }
+        public DateTime SentTime { get; set; }
 
         public int ChatId { get; set; }
 
@@ -19,7 +19,7 @@ namespace ChatApp.DAL.Entities
 
         public Message()
         {
-            When=DateTime.Now;
+            SentTime=DateTime.Now;
         }
     }
 }

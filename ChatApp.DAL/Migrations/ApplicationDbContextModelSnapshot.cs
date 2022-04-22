@@ -19,15 +19,12 @@ namespace ChatApp.DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Chat.Models.AppUser", b =>
+            modelBuilder.Entity("ChatApp.DAL.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -78,8 +75,6 @@ namespace ChatApp.DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -144,16 +139,14 @@ namespace ChatApp.DAL.Migrations
                     b.Property<int>("ChatId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("SentTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("When")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -299,21 +292,14 @@ namespace ChatApp.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Chat.Models.AppUser", b =>
-                {
-                    b.HasOne("ChatApp.DAL.Entities.Chat", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ChatId");
-                });
-
             modelBuilder.Entity("ChatApp.DAL.Entities.ChatUser", b =>
                 {
-                    b.HasOne("Chat.Models.AppUser", "AppUser")
-                        .WithMany()
+                    b.HasOne("ChatApp.DAL.Entities.AppUser", "AppUser")
+                        .WithMany("Chats")
                         .HasForeignKey("AppUserId");
 
                     b.HasOne("ChatApp.DAL.Entities.Chat", "Chat")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -325,7 +311,7 @@ namespace ChatApp.DAL.Migrations
 
             modelBuilder.Entity("ChatApp.DAL.Entities.Message", b =>
                 {
-                    b.HasOne("Chat.Models.AppUser", null)
+                    b.HasOne("ChatApp.DAL.Entities.AppUser", null)
                         .WithMany("Messages")
                         .HasForeignKey("AppUserId");
 
@@ -349,7 +335,7 @@ namespace ChatApp.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Chat.Models.AppUser", null)
+                    b.HasOne("ChatApp.DAL.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -358,7 +344,7 @@ namespace ChatApp.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Chat.Models.AppUser", null)
+                    b.HasOne("ChatApp.DAL.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -373,7 +359,7 @@ namespace ChatApp.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Chat.Models.AppUser", null)
+                    b.HasOne("ChatApp.DAL.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,15 +368,17 @@ namespace ChatApp.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Chat.Models.AppUser", null)
+                    b.HasOne("ChatApp.DAL.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Chat.Models.AppUser", b =>
+            modelBuilder.Entity("ChatApp.DAL.Entities.AppUser", b =>
                 {
+                    b.Navigation("Chats");
+
                     b.Navigation("Messages");
                 });
 

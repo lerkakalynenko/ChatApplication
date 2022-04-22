@@ -19,9 +19,10 @@ namespace ChatApp.DAL.EF
        protected override void OnModelCreating(ModelBuilder builder)
        {
            base.OnModelCreating(builder);
-
+           
            builder.Entity<ChatUser>()
                .HasKey(c => new {c.ChatId, c.UserId});
+
        }
     }
 }

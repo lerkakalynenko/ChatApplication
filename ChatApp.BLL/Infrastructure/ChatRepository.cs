@@ -26,7 +26,7 @@ namespace ChatApp.BLL.Infrastructure
                 ChatId = chatId,
                 Text = msgText,
                 UserName = userId,
-                When = DateTime.Now
+                SentTime = DateTime.Now
             };
 
             _db.Messages.Add(message);

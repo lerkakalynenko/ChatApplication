@@ -10,7 +10,7 @@
         <div class="message">
             <header>@msg.UserName</header>
             <p>@msg.Text</p>
-            <footer>@msg.When</footer>
+            <footer>@msg.SentTime</footer>
         </div>
     }
 </div>
@@ -47,7 +47,7 @@
                 p.appendChild(document.createTextNode(data.text));
 
                 const footer = document.createElement("footer");
-                footer.appendChild(document.createTextNode(data.when));
+                footer.appendChild(document.createTextNode(data.sentTime));
 
                 message.appendChild(header);
                 message.appendChild(p);

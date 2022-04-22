@@ -30,6 +30,7 @@ namespace ChatApp.Controllers
                 .Include(c => c.Users)
                 .Where(c => c.Users.All(x => x.UserId != userId))
                 .ToListAsync();
+
             return View(chats);
         }
 
@@ -90,7 +91,7 @@ namespace ChatApp.Controllers
                     ChatId = chatId,
                     Text = message,
                     UserName = User.Identity.Name,
-                    When = DateTime.Now,
+                    SentTime = DateTime.Now,
                 };
                 await _context.Messages.AddAsync(Message);
                 await _context.SaveChangesAsync();

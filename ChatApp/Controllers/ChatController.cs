@@ -49,7 +49,7 @@ namespace ChatApp.Controllers
                     ChatId = chatId,
                     Text = message,
                     UserName = User.Identity.Name,
-                    When = DateTime.Now,
+                    SentTime = DateTime.Now,
                 };
 
                 await context.Messages.AddAsync(Message);
@@ -60,7 +60,7 @@ namespace ChatApp.Controllers
                     {
                         UserName = Message.UserName,
                         Text = Message.Text,
-                        When = Message.When.ToString(),
+                        SentTime = Message.SentTime.ToString(),
                     });
                 return Ok();
             }
