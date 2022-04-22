@@ -15,54 +15,84 @@
     }
 </div>
 
-<form class="chat-input" asp-controller="Home" asp-action="CreateMessage">
-    <input type="hidden" name="chatId" value="@Model.Id"/>
-    <input type="text" name="message" />
+<form class="chat-input" onsubmit="sendMessage(event)" asp-controller="Home" asp-action="CreateMessage">
+    <input type="hidden" name="chatId" value="@Model.Id" />
+    <input type="hidden" name="roomName" value="@Model.Name" />
+    <input type="text" name="message" id="message-input" />
     <button type="submit">Send</button>
-    
+
 
 </form>
 
-@section Scripts
-{
+@section scripts
+    {
     <script src="signalr/signalr.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
     <script>
-        var connection = new signalR.HubConnectionBuilder()
-            .withUrl("/chatHub")
-            .build();
+            var connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chatHub")
+                .build();
+            var _connectionId = '';
+            connection.on("ReceiveMessage",
+                function(data) {
 
-        var _connectionId = '';
+                    var message = document.createElement("div");
+                    message.classList.add('message');
 
-        connection.on("receiveMessage",
-            function(data) {
-                console.log(data);
-            });
+                    var header = document.createElement("header");
+                    header.appendChild(document.createTextNode(data.name));
 
+                    var p = document.createElement("p");
+                    p.appendChild(document.createTextNode(data.text));
 
-        var joinRoom = function() {
-            var url = '/Chat/JoinRoom/' + _connectionId + '/@Model.Name';
-            axios.post(url, null)
-                .then(res => {
-                    console.log("Room joined!", res);
-                })
-                .catch(err => {
-                    console.log("Failed to join the room", res);
-                })
-        }
+                    var footer = document.createElement("footer");
+                    footer.appendChild(document.createTextNode(data.when));
 
-        connection.start()
-            .then(function() {
-                connection.invoke("getConnectionId")
-                    .then(function(connectionId) {
-                        _connectionId = connectionId;
-                        
-                        joinRoom();
+                    message.appendChild(header);
+                    message.appendChild(p);
+                    message.appendChild(footer);
+
+                    document.querySelector('.chat-body').append(message);
+
+                });
+
+            var joinRoom = function() {
+                var url = '/Chat/JoinRoom/' + _connectionId + '/@Model.Name'
+                axios.post(url, null)
+                    .then(res => {
+                        console.log("Room joined!", res)
                     })
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
+                    .catch(err => {
+                        console.log("Failed to join the room", res)
+                    });
+        }
+            
+            connection.start()
+                .then(function() {
+                    connection.invoke("getConnectionId")
+                        .then(function(connectionId) {
+                            _connectionId = connectionId;
+                            joinRoom();
+                        });
+                })
+                .catch(function(err) {
+                    console.log(err)
+                });
 
+
+            var sendMessage = function(event) {
+                event.preventDefault()
+                var data = new FormData(event.target)
+                document.getElementById('message-input').value = '';
+                axios.post('/Chat/SendMessage', data)
+                    .then(res => {
+                        console.log("Ok")
+                    })
+                    .catch(err => {
+                        console.log("Error")
+                    });
+
+            }
     </script>
 }

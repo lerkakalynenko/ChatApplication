@@ -3,13 +3,12 @@
     ViewData["Title"] = "Home Page";
 }
 
+
 <div class="chat-body">
-   @foreach (var chat in Model)
-   {
-       <a class="room-button" asp-controller="Home" 
-          asp-action="JoinRoom" asp-route-id="@chat.Id">
-           @chat.Name
-       </a>
-   }
+    @foreach(var chat in Model) {
+        <a class="room-button" asp-controller="Home" asp-action="JoinRoom" asp-route-id="@chat.Id">
+            @chat.Name
+        </a>
+    }
 </div>
 

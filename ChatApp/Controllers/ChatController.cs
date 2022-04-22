@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Chat.Models;
 using ChatApp.BLL.Infrastructure.Hubs;
 using ChatApp.DAL.EF;
 using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace ChatApp.Controllers
-{   
+{
     [Authorize]
     [Route("[controller]")]
     public class ChatController : Controller
@@ -39,6 +34,7 @@ namespace ChatApp.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
         public async Task<IActionResult> SendMessage(
             int chatId,
             string message,
@@ -58,8 +54,14 @@ namespace ChatApp.Controllers
 
                 await context.Messages.AddAsync(Message);
                 await context.SaveChangesAsync();
+
                 await _chat.Clients.Group(roomName)
-                    .SendAsync("receiveMessage", Message);
+                    .SendAsync("ReceiveMessage", new
+                    {
+                        UserName = Message.UserName,
+                        Text = Message.Text,
+                        When = Message.When.ToString(),
+                    });
                 return Ok();
             }
             catch

@@ -33,6 +33,7 @@ namespace ChatApp
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedEmail = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddSignalR();
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
@@ -55,6 +56,7 @@ namespace ChatApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -63,13 +65,17 @@ namespace ChatApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            
+
 
             app.UseEndpoints(endpoints =>
-            {
-
-                endpoints.MapHub<ChatHub>("/chatHub");
-            });
+                {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapHub<ChatHub>("/chatHub");
+                }
+            );
+            
         }
     }
 }

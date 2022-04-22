@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Chat = ChatApp.DAL.Entities.Chat;
 
 namespace ChatApp.Controllers
-{   
+{
     [Authorize]
     public class HomeController : Controller
     {
@@ -25,18 +25,18 @@ namespace ChatApp.Controllers
             _context = context;
         }
 
-        public async Task <IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var chats = await _context.Chats
-                .Include(c=>c.Users)
-                .Where(c=> c.Users.All(x => x.UserId != userId))
+                .Include(c => c.Users)
+                .Where(c => c.Users.All(x => x.UserId != userId))
                 .ToListAsync();
             return View(chats);
-        } 
+        }
 
         [HttpPost]
-        public async Task <IActionResult> CreateRoom(string name)
+        public async Task<IActionResult> CreateRoom(string name)
         {
             var chat = new DAL.Entities.Chat
             {
@@ -54,15 +54,15 @@ namespace ChatApp.Controllers
             await _context.Chats.AddAsync(chat);
             await _context.SaveChangesAsync();
 
-           return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Chat(int id)
         {
             var chat = await _context.Chats
-                .Include(c=>c.Messages)
-                .FirstOrDefaultAsync(c=>c.Id == id);
+                .Include(c => c.Messages)
+                .FirstOrDefaultAsync(c => c.Id == id);
             return View(chat);
         }
 
@@ -80,7 +80,7 @@ namespace ChatApp.Controllers
             await _context.ChatUsers.AddAsync(chatUser);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Chat", new {id=id });
+            return RedirectToAction("Chat", new { id = id });
         }
 
         [HttpPost]
@@ -97,16 +97,16 @@ namespace ChatApp.Controllers
                 };
                 await _context.Messages.AddAsync(Message);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Chat", new {id = chatId});
+                return RedirectToAction("Chat", new { id = chatId });
 
 
             }
-            catch 
+            catch
             {
                 return BadRequest("Something went wrong");
             }
 
-           
+
         }
 
         public IActionResult Privacy()
