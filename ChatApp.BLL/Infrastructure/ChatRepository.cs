@@ -19,29 +19,29 @@ namespace ChatApp.BLL.Infrastructure
         }
 
 
-        public async Task<Message> CreateMessage(int chatId, string message, string userId)
+        public async Task<Message> CreateMessage(int chatId, string msgText, string userId)
         {
-            var Message = new Message
+            var message = new Message
             {
                 ChatId = chatId,
-                Text = message,
+                Text = msgText,
                 UserName = userId,
                 When = DateTime.Now
             };
 
-            _db.Messages.Add(Message);
+            _db.Messages.Add(message);
             await _db.SaveChangesAsync();
 
-            return Message;
+            return message;
         }
 
         public async Task<int> CreatePrivateRoom(string rootId, string targetId)
         {
-            var chat = new DAL.Entities.Chat
+            var chat = new Chat
             {
                 Type = ChatType.Private
             };
-
+            
             chat.Users.Add(new ChatUser
             {
                 UserId = targetId
@@ -61,7 +61,7 @@ namespace ChatApp.BLL.Infrastructure
 
         public async Task CreateRoom(string name, string userId)
         {
-            var chat = new DAL.Entities.Chat
+            var chat = new Chat
             {
                 Name = name,
                 Type = ChatType.Room
@@ -78,30 +78,29 @@ namespace ChatApp.BLL.Infrastructure
             await _db.SaveChangesAsync();
         }
 
-        public DAL.Entities.Chat GetChat(int id)
+        public Chat GetChat(int id)
         {
             return _db.Chats
                 .Include(x => x.Messages)
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        public IEnumerable<DAL.Entities.Chat> GetChats(string userId)
+        public IEnumerable<Chat> GetChats(string userId)
         {
             return _db.Chats
                 .Include(x => x.Users)
-                .Where(x => x.Users.All(y => y.UserId != userId))
-                .ToList();
+                .Where(x => x.Users.All(y => y.UserId != userId));
+            //TODO: если вдруг каким-то чудом тут будет ошибка - вернуть ToList()
         }
 
-        public IEnumerable<DAL.Entities.Chat> GetPrivateChats(string userId)
+        public IEnumerable<Chat> GetPrivateChats(string userId)
         {
             return _db.Chats
-                   .Include(x => x.Users)
-                       .ThenInclude(x => x.AppUser)
-                   .Where(x => x.Type == ChatType.Private
-                       && x.Users
-                           .Any(y => y.UserId == userId))
-                   .ToList();
+                .Include(x => x.Users)
+                .ThenInclude(x => x.AppUser)
+                .Where(x => x.Type == ChatType.Private
+                            && x.Users
+                                .Any(y => y.UserId == userId));//TODO: и тут
         }
 
         public async Task JoinRoom(int chatId, string userId)

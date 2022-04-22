@@ -17,11 +17,9 @@ namespace ChatApp.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
@@ -38,11 +36,10 @@ namespace ChatApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRoom(string name)
         {
-            var chat = new DAL.Entities.Chat
+            var chat = new Chat
             {
                 Name = name,
                 Type = ChatType.Room,
-
             };
 
             chat.Users.Add(new ChatUser
@@ -97,9 +94,9 @@ namespace ChatApp.Controllers
                 };
                 await _context.Messages.AddAsync(Message);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Chat", new { id = chatId });
-
-
+                
             }
             catch
             {

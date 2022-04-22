@@ -12,7 +12,7 @@ namespace ChatApp.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Email or password is incorrect")]
+        [Compare("Password", ErrorMessage = "Name or password is incorrect")]
 
         public string ConfirmPassword { get; set; }
     }

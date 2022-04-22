@@ -30,69 +30,69 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     
     <script>
-            var connection = new signalR.HubConnectionBuilder()
-                .withUrl("/chatHub")
-                .build();
-            var _connectionId = '';
-            connection.on("ReceiveMessage",
-                function(data) {
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+        var _connectionId = '';
+        connection.on("ReceiveMessage",
+            function (data) {
 
-                    var message = document.createElement("div");
-                    message.classList.add('message');
+                const message = document.createElement("div");
+                message.classList.add('message');
 
-                    var header = document.createElement("header");
-                    header.appendChild(document.createTextNode(data.name));
+                const header = document.createElement("header");
+                header.appendChild(document.createTextNode(data.userName));
 
-                    var p = document.createElement("p");
-                    p.appendChild(document.createTextNode(data.text));
+                const p = document.createElement("p");
+                p.appendChild(document.createTextNode(data.text));
 
-                    var footer = document.createElement("footer");
-                    footer.appendChild(document.createTextNode(data.when));
+                const footer = document.createElement("footer");
+                footer.appendChild(document.createTextNode(data.when));
 
-                    message.appendChild(header);
-                    message.appendChild(p);
-                    message.appendChild(footer);
+                message.appendChild(header);
+                message.appendChild(p);
+                message.appendChild(footer);
 
-                    document.querySelector('.chat-body').append(message);
+                document.querySelector('.chat-body').append(message);
 
-                });
+            });
 
-            var joinRoom = function() {
-                var url = '/Chat/JoinRoom/' + _connectionId + '/@Model.Name'
-                axios.post(url, null)
-                    .then(res => {
-                        console.log("Room joined!", res)
-                    })
-                    .catch(err => {
-                        console.log("Failed to join the room", res)
-                    });
-        }
-            
-            connection.start()
-                .then(function() {
-                    connection.invoke("getConnectionId")
-                        .then(function(connectionId) {
-                            _connectionId = connectionId;
-                            joinRoom();
-                        });
+        var joinRoom = function () {
+            var url = '/Chat/JoinRoom/' + _connectionId + '/@Model.Name';
+            axios.post(url, null)
+                .then(res => {
+                    console.log("Room joined!", res);
                 })
-                .catch(function(err) {
-                    console.log(err)
+                .catch(err => {
+                    console.log("Failed to join the room", res);
+                });
+        }
+
+        connection.start()
+            .then(function () {
+                connection.invoke("getConnectionId")
+                    .then(function (connectionId) {
+                        _connectionId = connectionId;
+                        joinRoom();
+                    });
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+
+
+        var sendMessage = function (event) {
+            event.preventDefault();
+            var data = new FormData(event.target);
+            document.getElementById('message-input').value = '';
+            axios.post('/Chat/SendMessage', data)
+                .then(res => {
+                    console.log("Ok");
+                })
+                .catch(err => {
+                    console.log("Error");
                 });
 
-
-            var sendMessage = function(event) {
-                event.preventDefault()
-                var data = new FormData(event.target)
-                document.getElementById('message-input').value = '';
-                axios.post('/Chat/SendMessage', data)
-                    .then(res => {
-                        console.log("Ok")
-                    })
-                    .catch(err => {
-                        console.log("Error")
-                    });
-
-            }
+        }
     </script>
 }

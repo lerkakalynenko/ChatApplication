@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chat.Models;
+﻿using System.Threading.Tasks;
+using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
-using ChatApp.Models;
 using LoginModel = ChatApp.Models.LoginModel;
 using RegisterModel = ChatApp.Models.RegisterModel;
 
@@ -59,13 +53,8 @@ namespace ChatApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            else
-            {
 
-
-                ModelState.AddModelError(string.Empty, "Incorrect login or password.");
-
-            }
+            ModelState.AddModelError(string.Empty, "Incorrect login or password.");
 
             return View();
         }
@@ -93,14 +82,13 @@ namespace ChatApp.Controllers
                 {
 
                     await _signInManager.SignInAsync(user, false);
+
                     return RedirectToAction("Index", "Home");
                 }
-                else
+
+                foreach (var error in result.Errors)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 

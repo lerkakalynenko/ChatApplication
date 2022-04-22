@@ -1,6 +1,6 @@
-using Chat.Models;
 using ChatApp.BLL.Infrastructure.Hubs;
 using ChatApp.DAL.EF;
+using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

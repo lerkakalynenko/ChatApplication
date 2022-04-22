@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Chat.Models;
 
 namespace ChatApp.DAL.Entities
 {
@@ -12,7 +11,6 @@ namespace ChatApp.DAL.Entities
         public string UserId { get; set; }
 
         public AppUser AppUser { get; set; }
-
 
         public int ChatId { get; set; }
 

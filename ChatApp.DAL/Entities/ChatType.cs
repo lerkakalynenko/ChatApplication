@@ -9,7 +9,6 @@ namespace ChatApp.DAL.Entities
     public enum ChatType
     {
         Room,
-
         Private,
     }
    

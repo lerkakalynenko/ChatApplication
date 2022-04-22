@@ -30,8 +30,6 @@ namespace ChatApp.Models
                 .ToList();
 
             return View(chats);
-          
-            
         }
     }
 }

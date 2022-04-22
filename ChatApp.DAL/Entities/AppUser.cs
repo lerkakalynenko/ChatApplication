@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChatApp.DAL.Entities;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace Chat.Models
+namespace ChatApp.DAL.Entities
 {
     public class AppUser : IdentityUser
     {
@@ -14,9 +9,9 @@ namespace Chat.Models
 
         public AppUser()
         {
-            Messages = new HashSet<Message>();
+           // Messages = new HashSet<Message>();
         }
-        public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; } = new HashSet<Message>();
 
         public string Password { get; set; }
     }

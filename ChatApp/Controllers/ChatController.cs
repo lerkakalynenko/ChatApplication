@@ -69,9 +69,5 @@ namespace ChatApp.Controllers
                 return BadRequest("something went wrong");
             }
         }
-
-
-
-
     }
 }

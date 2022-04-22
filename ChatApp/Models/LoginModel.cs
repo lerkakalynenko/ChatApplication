@@ -4,7 +4,7 @@ namespace ChatApp.Models
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "Enter Email")]
+        [Required(ErrorMessage = "Enter UserName")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Enter Password")]

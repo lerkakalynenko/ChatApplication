@@ -9,12 +9,12 @@ namespace ChatApp.BLL.Infrastructure
 {
     public interface IChatRepository
     {
-        DAL.Entities.Chat GetChat(int id);
+        Chat GetChat(int id);
         Task CreateRoom(string name, string userId);
         Task JoinRoom(int chatId, string userId);
-        IEnumerable<DAL.Entities.Chat> GetChats(string userId);
+        IEnumerable<Chat> GetChats(string userId);
         Task<int> CreatePrivateRoom(string rootId, string targetId);
-        IEnumerable<DAL.Entities.Chat> GetPrivateChats(string userId);
+        IEnumerable<Chat> GetPrivateChats(string userId);
 
         Task<Message> CreateMessage(int chatId, string message, string userId);
     }

@@ -1,5 +1,4 @@
-﻿using Chat.Models;
-using ChatApp.DAL.Entities;
+﻿using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +9,10 @@ namespace ChatApp.DAL.EF
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            
         }
 
-       public DbSet<Entities.Chat> Chats { get; set; }
+       public DbSet<Chat> Chats { get; set; }
        public DbSet<Message> Messages { get; set; }
        public DbSet<ChatUser> ChatUsers { get; set; }
 
