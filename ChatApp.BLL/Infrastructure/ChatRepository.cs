@@ -78,9 +78,9 @@ namespace ChatApp.BLL.Infrastructure
             await _db.SaveChangesAsync();
         }
 
-        public Chat GetChat(int id)
+        public  Chat GetChat(int id)
         {
-            return _db.Chats
+            return  _db.Chats
                 .Include(x => x.Messages)
                 .FirstOrDefault(x => x.Id == id);
         }
@@ -90,7 +90,6 @@ namespace ChatApp.BLL.Infrastructure
             return _db.Chats
                 .Include(x => x.Users)
                 .Where(x => x.Users.All(y => y.UserId != userId));
-            //TODO: если вдруг каким-то чудом тут будет ошибка - вернуть ToList()
         }
 
         public IEnumerable<Chat> GetPrivateChats(string userId)
@@ -100,7 +99,7 @@ namespace ChatApp.BLL.Infrastructure
                 .ThenInclude(x => x.AppUser)
                 .Where(x => x.Type == ChatType.Private
                             && x.Users
-                                .Any(y => y.UserId == userId));//TODO: и тут
+                                .Any(y => y.UserId == userId));
         }
 
         public async Task JoinRoom(int chatId, string userId)

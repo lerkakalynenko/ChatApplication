@@ -1,3 +1,4 @@
+using ChatApp.BLL.Infrastructure;
 using ChatApp.BLL.Infrastructure.Hubs;
 using ChatApp.DAL.EF;
 using ChatApp.DAL.Entities;
@@ -33,7 +34,7 @@ namespace ChatApp
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedEmail = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddSignalR();
-
+            services.AddTransient<IChatRepository, ChatRepository>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
