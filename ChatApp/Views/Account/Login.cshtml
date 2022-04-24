@@ -1,24 +1,28 @@
 ﻿@model LoginModel
+<style type="text/css">.validation { }</style>
+<div class="container" style="align-items: center">
+    <h2>Authorizing</h2>
 
-<h2>Authorizing</h2>
+    <a asp-action="Register" asp-controller="Account">Registration</a>
+    <br/>
 
-<a asp-action="Register" asp-controller="Account">Registration</a>
+    <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
 
-<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
-        <div class="form-group">
-            <label asp-for="UserName">Enter Email</label>
-            <input type="text" asp-for="UserName" />
-            <span asp-validation-for="UserName" />
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div>
+            <div class="form-group">
+                <label asp-for="UserName">Enter Email</label>
+                <input type="text" asp-for="UserName" />
+                <span asp-validation-for="UserName" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Enter password</label>
+                <input asp-for="Password" />
+                <span asp-validation-for="Password" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-outline-dark" />
+            </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Password">Enter password</label>
-            <input asp-for="Password" />
-            <span asp-validation-for="Password" />
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-outline-dark" />
-        </div>
-    </div>
-</form>
+    </form>
+</div>

@@ -31,15 +31,15 @@
             </div>
         </nav>
     </header>
-  
-<div class="navbar">
-    <a asp-controller="Home" asp-action="Index">Chats</a>
-    <a asp-controller="Home" asp-action="Find">Find</a>
-</div>
+
+    <div class="navbar">
+        <a asp-controller="Home" asp-action="Index">Chats</a>
+        <a asp-controller="Home" asp-action="Find">Find</a>
+    </div>
     <div class="main">
         @if (User.Identity.IsAuthenticated)
         {
-            <vc:room></vc:room> 
+            <vc:room></vc:room>
         }
         <div class="chat">
             @RenderBody()
@@ -58,6 +58,20 @@
             </footer>
         </form>
     </div>
+
+    <div class="modal" id="create-message-modal">
+        <form asp-controller="Home" asp-action="CreateRoom" class="modal-body">
+            <button type="button" class="close" onclick="closeMessageModal()">X</button>
+            <header>Editing the message</header>
+            <div>
+                <input name="name">
+            </div>
+            <footer>
+                <button>Edit</button>
+            </footer>
+        </form>
+    </div>
+
 
     <footer class="border-top footer text-muted">
         <div class="container">

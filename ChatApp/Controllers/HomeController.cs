@@ -1,8 +1,7 @@
-﻿using System.Linq;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ChatApp.BLL.Infrastructure;
-using ChatApp.DAL.EF;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ChatApp.Controllers
@@ -40,10 +39,11 @@ namespace ChatApp.Controllers
 
         // joining defined chat
         [HttpGet("{id}")]
-        public Task<IActionResult> Chat(int id)
+        public async Task<IActionResult> Chat(int id)
         {
-            var chat = _chatRepository.GetChat(id);
-            return Task.FromResult<IActionResult>(View(chat));
+            var chat = await _chatRepository.GetChat(id);
+
+            return View(chat);
         }
 
         // joining the room as a member
@@ -75,8 +75,16 @@ namespace ChatApp.Controllers
 
         public async Task<IActionResult> CreatePrivateRoom(string userId)
         {
-            var id = await _chatRepository.CreatePrivateRoom(GetUserId(), userId);
+           
+            var chat = await _chatRepository.GetPrivateChat(GetUserId(), userId);
 
+            if (chat != null)
+            {
+                return RedirectToAction("Chat", new { chat.Id });
+            }
+
+            var id = await _chatRepository.CreatePrivateRoom(GetUserId(), userId);
+            
             return RedirectToAction("Chat", new { id });
         }
 

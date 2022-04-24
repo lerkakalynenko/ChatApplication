@@ -24,6 +24,11 @@ namespace ChatApp.DAL.Entities
         public ChatType Type { get; set; }
 
         public string Name { get; set; }
+
+        public bool IsUserInChat(string userId)
+        {
+            return Users.Any(user => user.UserId == userId);
+        }
     }
 
     

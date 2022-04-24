@@ -7,11 +7,17 @@
 
     @foreach (var msg in Model.Messages)
     {
-        <div class="message">
-            <header>@msg.UserName</header>
-            <p>@msg.Text</p>
-            <footer>@msg.SentTime</footer>
-        </div>
+    <div class="message">
+        <header>@msg.UserName</header>
+        
+        <p>
+            <a id="make-edit-with-message">
+                @msg.Text
+            </a>
+        </p>
+        
+        <footer>@msg.SentTime</footer>
+    </div>
     }
 </div>
 
@@ -25,7 +31,8 @@
 </form>
 
 @section scripts
-    {
+{
+    <script src="js/site.js"></script>
     <script src="signalr/signalr.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>

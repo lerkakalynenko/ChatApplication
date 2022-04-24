@@ -17,6 +17,8 @@ namespace ChatApp.DAL.Entities
 
         public Chat Chat { get; set; }
 
+        public bool DeletedOnlyFromMyChat { get; set; }
+
         public Message()
         {
             SentTime=DateTime.Now;

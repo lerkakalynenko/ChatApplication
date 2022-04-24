@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace ChatApp.DAL.Entities
@@ -9,7 +10,7 @@ namespace ChatApp.DAL.Entities
 
         public AppUser()
         {
-           // Messages = new HashSet<Message>();
+            // Messages = new HashSet<Message>();
         }
         public virtual ICollection<Message> Messages { get; set; } = new HashSet<Message>();
 

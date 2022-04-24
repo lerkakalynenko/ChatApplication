@@ -14,10 +14,12 @@ namespace ChatApp.BLL.Infrastructure
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<AppUser> _userManager;
-        public ChatRepository(ApplicationDbContext db, UserManager<AppUser> userManager)
+        private readonly IUserRepository _userRepository;
+        public ChatRepository(ApplicationDbContext db, UserManager<AppUser> userManager, IUserRepository userRepository)
         {
             _db = db;
             _userManager = userManager;
+            _userRepository = userRepository;
         }
 
 
@@ -88,11 +90,11 @@ namespace ChatApp.BLL.Infrastructure
         }
 
         
-        public  Chat GetChat(int id)
+        public async Task<Chat> GetChat(int id)
         {
-            return  _db.Chats
+            return await _db.Chats
                 .Include(x => x.Messages)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public IEnumerable<Chat> GetChats(string userId)
@@ -102,15 +104,25 @@ namespace ChatApp.BLL.Infrastructure
                 .Where(x => x.Users.All(y => y.UserId != userId) && x.Type!=ChatType.Private);
         }
 
-        public IEnumerable<Chat> GetPrivateChats(string userId)
+        public async Task<Chat> GetPrivateChat(string user1Id, string user2Id)
         {
-            return _db.Chats
-                .Include(x => x.Users)
-                .ThenInclude(x => x.Chat.Users)
-                .Where(x => x.Type == ChatType.Private
-                            && x.Users
-                                .Any(y => y.UserId == userId));
+            var chats = await _db.Chats.Include(x => x.Users)
+                .Where(chat => chat.Type.Equals(ChatType.Private))
+                .ToListAsync();
+
+            return await Task.Run(()=>chats.FirstOrDefault(chat => chat.IsUserInChat(user1Id) && chat.IsUserInChat(user2Id)));
         }
+
+
+        //public IEnumerable<Chat> GetPrivateChats(string userId)
+        //{
+        //    return _db.Chats
+        //        .Include(x => x.Users)
+        //        .ThenInclude(x => x.Chat.Users)
+        //        .Where(x => x.Type == ChatType.Private
+        //                    && x.Users
+        //                        .Any(y => y.UserId == userId));
+        //}
 
         public async Task JoinRoom(int chatId, string userId)
         {

@@ -18,8 +18,4 @@
     <ProjectReference Include="..\ChatApp.DAL\ChatApp.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Chat\" />
-  </ItemGroup>
-
 </Project>

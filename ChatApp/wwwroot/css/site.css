@@ -77,6 +77,7 @@ body {
     background-color: #eee;
     flex-grow: 1;
     display: flex;
+    height: 500px;
     flex-direction: column;
     padding-bottom: 1rem;
     overflow: auto;
@@ -278,8 +279,6 @@ body {
   margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   white-space: nowrap;
   /* Set the fixed height of the footer here */
