@@ -4,12 +4,9 @@ using ChatApp.DAL.EF;
 using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 using Microsoft.Extensions.Hosting;
 
 namespace ChatApp
@@ -35,6 +32,7 @@ namespace ChatApp
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddSignalR();
             services.AddTransient<IChatRepository, ChatRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";

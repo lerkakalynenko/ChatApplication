@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ChatApp.BLL.Infrastructure;
+using ChatApp.DAL.EF;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ChatApp.Controllers
@@ -10,12 +12,12 @@ namespace ChatApp.Controllers
     {
 
         private readonly IChatRepository _chatRepository;
+        private readonly IUserRepository _userRepository;
 
-
-        public HomeController(IChatRepository chatRepository)
+        public HomeController(IChatRepository chatRepository, IUserRepository userRepository)
         {
-          
             _chatRepository = chatRepository;
+            _userRepository = userRepository;
         }
 
         // displaying all chats that and weren't joined by a user yet
@@ -70,12 +72,28 @@ namespace ChatApp.Controllers
             }
 
         }
+
+        public async Task<IActionResult> CreatePrivateRoom(string userId)
+        {
+            var id = await _chatRepository.CreatePrivateRoom(GetUserId(), userId);
+
+            return RedirectToAction("Chat", new { id });
+        }
+
+
+        public IActionResult Find()
+        {
+            var users = _userRepository.GetUsers(GetUserId());
+
+            return View(users);
+        }
+
+
+
         public IActionResult Privacy()
         {
             return View();
         }
-
-
 
        
     }
