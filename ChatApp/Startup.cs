@@ -33,6 +33,7 @@ namespace ChatApp
             services.AddSignalR();
             services.AddTransient<IChatRepository, ChatRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";

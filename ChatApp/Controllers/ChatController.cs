@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ChatApp.BLL.Infrastructure;
 using ChatApp.BLL.Infrastructure.Hubs;
-using ChatApp.DAL.EF;
 using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +15,14 @@ namespace ChatApp.Controllers
     {
         private readonly IHubContext<ChatHub> _chat;
         private readonly IChatRepository _chatRepository;
+        private readonly IMessageRepository _messageRepository;
 
 
-        public ChatController(IHubContext<ChatHub> chat, IChatRepository chatRepository)
+        public ChatController(IHubContext<ChatHub> chat, IChatRepository chatRepository, IMessageRepository messageRepository)
         {
             _chat = chat;
             _chatRepository = chatRepository;
+            _messageRepository = messageRepository;
         }
        
 
@@ -43,12 +44,15 @@ namespace ChatApp.Controllers
         public async Task<IActionResult> SendMessage(
             int chatId,
             string roomName,
-            string message,
-
-            [FromServices] ApplicationDbContext context)
+            string message
+        )
         {
             try
             {
+                if (message == null)
+                {
+                    return RedirectToAction("Chat", "Home", chatId);
+                }
                 var entity = new Message
                 {
                     ChatId = chatId,
@@ -72,6 +76,50 @@ namespace ChatApp.Controllers
             {
                 return BadRequest("Something went wrong");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMessageFromAll(int id, int chatId)
+        {
+            try
+            {
+                await _messageRepository.DeleteMessageFromAll(id);
+            }
+            catch 
+            {
+                return BadRequest("Something went wrong");
+            }
+            
+            return RedirectToAction("Chat", "Home", chatId);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOnlyFromUser(int id, int chatId)
+        {
+            try
+            {
+                await _messageRepository.DeleteOnlyFromUser(id, GetUserId());
+            }
+            catch
+            {
+                return BadRequest("Something went wrong");
+            }
+
+            return RedirectToAction("Chat", "Home", chatId);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditMessage(int id, string newMessage, int chatId)
+        {
+            try
+            {
+                await _messageRepository.UpdateMessage(id, newMessage);
+            }
+            catch 
+            {
+                return BadRequest("Something went wrong");
+            }
+            return RedirectToAction("Chat", "Home", chatId);
         }
     }
 }

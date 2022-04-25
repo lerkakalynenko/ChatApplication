@@ -2,24 +2,40 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<script src="js/modal.js"></script>
 <div class="chat-body">
 
     @foreach (var msg in Model.Messages)
     {
-    <div class="message">
-        <header>@msg.UserName</header>
-        
-        <p>
-            <a id="make-edit-with-message">
+   
+        <div class="message" oncontextmenu="openContextMenu(this)">
+
+            <header>@msg.UserName</header>
+            <p>
                 @msg.Text
-            </a>
-        </p>
+            </p>
+            <footer>@msg.SentTime</footer>
+            <div class="context-menu d-none">
+                <div>
+                    <a href="#">Edit</a>
+                </div>
+                <div>
+                    <a asp-controller="Chat", asp-action="DeleteOnlyFromUser"
+                       asp-route-id="@msg.Id" asp-route-chatId="@Model.Id">Delete from me</a>
+                </div>
+                <div>
+                    <a href="#">Delete from all</a>
+                </div>
+            </div>
+        </div>
         
-        <footer>@msg.SentTime</footer>
-    </div>
     }
+
 </div>
+
+
+
+
 
 <form class="chat-input" onsubmit="sendMessage(event)" asp-controller="Home" asp-action="CreateMessage">
     <input type="hidden" name="chatId" value="@Model.Id" />
@@ -36,7 +52,7 @@
     <script src="signalr/signalr.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        
+
         var connection = new signalR.HubConnectionBuilder()
             .withUrl("/chatHub")
             .build();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ChatApp.DAL.EF;
 using ChatApp.DAL.Entities;
@@ -89,7 +88,6 @@ namespace ChatApp.BLL.Infrastructure
             return chat.Id;
         }
 
-        
         public async Task<Chat> GetChat(int id)
         {
             return await _db.Chats
@@ -112,17 +110,6 @@ namespace ChatApp.BLL.Infrastructure
 
             return await Task.Run(()=>chats.FirstOrDefault(chat => chat.IsUserInChat(user1Id) && chat.IsUserInChat(user2Id)));
         }
-
-
-        //public IEnumerable<Chat> GetPrivateChats(string userId)
-        //{
-        //    return _db.Chats
-        //        .Include(x => x.Users)
-        //        .ThenInclude(x => x.Chat.Users)
-        //        .Where(x => x.Type == ChatType.Private
-        //                    && x.Users
-        //                        .Any(y => y.UserId == userId));
-        //}
 
         public async Task JoinRoom(int chatId, string userId)
         {

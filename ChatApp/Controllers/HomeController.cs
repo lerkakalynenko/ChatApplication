@@ -73,6 +73,7 @@ namespace ChatApp.Controllers
 
         }
 
+        // creating the private chat
         public async Task<IActionResult> CreatePrivateRoom(string userId)
         {
            
@@ -88,7 +89,7 @@ namespace ChatApp.Controllers
             return RedirectToAction("Chat", new { id });
         }
 
-
+        // find other users
         public IActionResult Find()
         {
             var users = _userRepository.GetUsers(GetUserId());
