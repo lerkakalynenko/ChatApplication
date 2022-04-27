@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿    using System.Threading.Tasks;
 using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;

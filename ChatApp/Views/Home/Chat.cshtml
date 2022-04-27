@@ -3,11 +3,10 @@
     ViewData["Title"] = "Home Page";
 }
 <script src="js/modal.js"></script>
+<h2 style="text-align: center">@Model.Name</h2>
 <div class="chat-body">
-
     @foreach (var msg in Model.Messages)
     {
-   
         <div class="message" oncontextmenu="openContextMenu(this)">
 
             <header>@msg.UserName</header>
@@ -17,14 +16,14 @@
             <footer>@msg.SentTime</footer>
             <div class="context-menu d-none">
                 <div>
-                    <a href="#">Edit</a>
+                    <a asp-action="Edit" asp-controller="Chat" asp-route-Id="@msg.Id" asp-route-chatId="@Model.Id">Edit</a>
                 </div>
                 <div>
-                    <a asp-controller="Chat", asp-action="DeleteOnlyFromUser"
-                       asp-route-id="@msg.Id" asp-route-chatId="@Model.Id">Delete from me</a>
+                    <a asp-controller="Chat" asp-action="DeleteMessageFromAll" asp-route-Id="@msg.Id" asp-route-chatId="@Model.Id">Delete from all</a>
                 </div>
                 <div>
-                    <a href="#">Delete from all</a>
+                    <a asp-action="ReplyToGroup" asp-controller="Chat" asp-route-messageId="@msg.Id"
+                       asp-route-chatId="@Model.Id" asp-route-roomName="@Model.Name">Reply to group</a>
                 </div>
             </div>
         </div>
@@ -33,16 +32,11 @@
 
 </div>
 
-
-
-
-
-<form class="chat-input" onsubmit="sendMessage(event)" asp-controller="Home" asp-action="CreateMessage">
-    <input type="hidden" name="chatId" value="@Model.Id" />
-    <input type="hidden" name="roomName" value="@Model.Name" />
+<form class="chat-input" method="post">
+    <input type="hidden" name="chatId" id="chatId" value="@Model.Id" />
+    <input type="hidden" name="roomName" id="roomName" value="@Model.Name" />
     <input type="text" name="message" id="message-input" />
     <button type="submit">Send</button>
-
 
 </form>
 
@@ -58,7 +52,7 @@
             .build();
         var _connectionId = '';
         connection.on("ReceiveMessage",
-            function (data) {
+            function(data) {
 
                 const message = document.createElement("div");
                 message.classList.add('message');
@@ -80,7 +74,7 @@
 
             });
 
-        var joinRoom = function () {
+        var joinRoom = function() {
             var url = '/Chat/JoinRoom/' + _connectionId + '/@Model.Name';
             axios.post(url, null)
                 .then(res => {
@@ -92,30 +86,43 @@
         }
 
         connection.start()
-            .then(function () {
+            .then(function() {
                 connection.invoke("getConnectionId")
-                    .then(function (connectionId) {
+                    .then(function(connectionId) {
                         _connectionId = connectionId;
                         joinRoom();
                     });
             })
-            .catch(function (err) {
+            .catch(function(err) {
                 console.log(err);
             });
 
+        window.onload = function() {
+            var form = document.querySelector("form");
+            form.onsubmit = submitted.bind(form);
+        }
 
-        var sendMessage = function (event) {
+        function submitted(event) {
             event.preventDefault();
-            var data = new FormData(event.target);
+            const chatId = document.querySelector("#chatId").value;
+            const roomName = document.querySelector("#roomName").value;
+            const messageInput = document.querySelector("#message-input").value;
+
+            const url = `/Chat/SendMessage?chatId=${chatId}&roomName=${roomName}&message=${messageInput}`;
+            
             document.getElementById('message-input').value = '';
-            axios.post('/Chat/SendMessage', data)
+            fetch(url,
+                {
+                    method: 'POST'
+                })
                 .then(res => {
                     console.log("Ok");
                 })
                 .catch(err => {
                     console.log("Error");
                 });
-
+                
         }
+
     </script>
 }

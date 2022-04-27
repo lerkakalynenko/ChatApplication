@@ -56,23 +56,7 @@ namespace ChatApp.Controllers
 
         }
 
-        // creating message 
-        [HttpPost]
-        public async Task<IActionResult> CreateMessage(int chatId, string message)
-        {
-            try
-            {
-                await _chatRepository.CreateMessage(chatId, message, GetUserId());
-                return RedirectToAction("Chat", new { id = chatId });
-
-            }
-            catch
-            {
-                return BadRequest("Something went wrong");
-            }
-
-        }
-
+        
         // creating the private chat
         public async Task<IActionResult> CreatePrivateRoom(string userId)
         {

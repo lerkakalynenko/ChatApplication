@@ -12,9 +12,12 @@ namespace ChatApp.DAL.EF
             
         }
 
+
+
        public DbSet<Chat> Chats { get; set; }
        public DbSet<Message> Messages { get; set; }
        public DbSet<ChatUser> ChatUsers { get; set; }
+
 
        protected override void OnModelCreating(ModelBuilder builder)
        {
@@ -24,5 +27,9 @@ namespace ChatApp.DAL.EF
                .HasKey(c => new {c.ChatId, c.UserId});
 
        }
+
     }
+
+
+
 }

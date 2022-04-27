@@ -18,8 +18,8 @@ namespace ChatApp.BLL.Infrastructure
 
         public async Task DeleteMessageFromAll(int id)
         {
-            var entity = _context.Messages.FindAsync(id);
-            _context.Messages.Remove(await entity);
+            var entity = await _context.Messages.FindAsync(id);
+            _context.Messages.Remove(entity);
             await _context.SaveChangesAsync();
 
         }
@@ -41,6 +41,12 @@ namespace ChatApp.BLL.Infrastructure
             entity.Text = newMessage;
             _context.Messages.Update(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Message> FindMessage(int id)
+        {
+            var message = await _context.Messages.FindAsync(id);
+            return message;
         }
 
         public Task<Message> ReplyToMessageInGroup(int groupId, int repliedMessage, int newMessage)

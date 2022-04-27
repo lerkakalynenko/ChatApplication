@@ -1,0 +1,16 @@
+﻿@model ChatApp.Models.ReplyViewModel
+<div class="container" style="align-items: center">
+    <div>
+        <form method="post" asp-controller="Chat" asp-action="SaveReply">
+            <h2>Reply to user: @Model.UserName message: @Model.RepliedMessage</h2>
+            <input hidden="hidden" asp-for="RoomName" value="@Model.RoomName"/>
+            <input hidden="hidden" asp-for="UserName" value="@Model.UserName"/>
+            <input hidden="hidden" asp-for="ChatId" value="@Model.ChatId"/>
+            <input hidden="hidden" asp-for="MessageId" value="@Model.MessageId"/>
+            <input hidden="hidden" asp-for="RepliedMessage" value="@Model.RepliedMessage"/>
+            <input class="chat-input" asp-for="Reply"/>
+            <p><input class="room-button" style="width: 100px"type="submit" value="Reply"/></p>
+        </form>
+
+    </div>
+</div>

@@ -1,0 +1,13 @@
+﻿@model ChatApp.Models.EditViewModel
+    <div class="container" style="align-items: center">
+        <div>
+            <form method="post" asp-controller="Chat" asp-action="SaveEditModel">
+                <h2>Edit your message</h2>
+                <input hidden="hidden" asp-for="ChatId" value="@Model.ChatId"/>
+                <input hidden="hidden" asp-for="MessageId" value="@Model.MessageId"/>
+                <input class="chat-input" asp-for="Message"/>
+                <p><input class="room-button" style="width: 100px"type="submit" value="Save"/></p>
+            </form>
+
+        </div>
+    </div>
