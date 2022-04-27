@@ -25,7 +25,7 @@ namespace ChatApp
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("ConnectionString");
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase(databaseName:"ChatApplication"));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedEmail = false)
