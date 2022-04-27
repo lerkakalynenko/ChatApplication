@@ -1,4 +1,6 @@
-﻿using ChatApp.DAL.Entities;
+﻿using System;
+using System.Threading.Tasks.Dataflow;
+using ChatApp.DAL.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +11,8 @@ namespace ChatApp.DAL.EF
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            
-        }
 
+        }
 
 
        public DbSet<Chat> Chats { get; set; }
@@ -19,7 +20,8 @@ namespace ChatApp.DAL.EF
        public DbSet<ChatUser> ChatUsers { get; set; }
 
 
-       protected override void OnModelCreating(ModelBuilder builder)
+        
+        protected override void OnModelCreating(ModelBuilder builder)
        {
            base.OnModelCreating(builder);
            
@@ -27,7 +29,8 @@ namespace ChatApp.DAL.EF
                .HasKey(c => new {c.ChatId, c.UserId});
 
        }
-
+      
+       
     }
 
 

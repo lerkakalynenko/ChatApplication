@@ -13,12 +13,11 @@ namespace ChatApp.BLL.Infrastructure
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IUserRepository _userRepository;
+
         public ChatRepository(ApplicationDbContext db, UserManager<AppUser> userManager, IUserRepository userRepository)
         {
             _db = db;
             _userManager = userManager;
-            _userRepository = userRepository;
         }
 
 

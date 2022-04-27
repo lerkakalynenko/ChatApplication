@@ -9,7 +9,5 @@ namespace ChatApp.BLL.Infrastructure
         Task DeleteOnlyFromUser(int messageId, string userId);
         Task UpdateMessage(int id, string newMessage);
         Task<Message> FindMessage(int id);
-        Task<Message> ReplyToMessageInGroup(int groupId, int repliedMessage, int newMessage);
-        Task<Message> ReplyToPrivateChat(string userId, int repliedMessage, int newMessage);
     }
 }

@@ -49,14 +49,6 @@ namespace ChatApp.BLL.Infrastructure
             return message;
         }
 
-        public Task<Message> ReplyToMessageInGroup(int groupId, int repliedMessage, int newMessage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Message> ReplyToPrivateChat(string userId, int repliedMessage, int newMessage)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
